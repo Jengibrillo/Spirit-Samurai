@@ -54,3 +54,9 @@ TagManager:
   - name: Projectiles
     uniqueID: 1621131611
     locked: 0
+  - name: Suelo
+    uniqueID: 1257578517
+    locked: 0
+  - name: Sueloraw
+    uniqueID: 3875002225
+    locked: 0
