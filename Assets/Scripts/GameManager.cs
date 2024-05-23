@@ -4,12 +4,12 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject gameOverText; // Referencia al texto de "You are dead"
-    public Button restartButton; // Referencia al botón de reinicio
+    public GameObject gameOverText; // Reference to "You are dead" text
+    public Button restartButton; // Reference to the restart button
 
     void Start()
     {
-        // Asegúrate de que la pantalla de Game Over esté desactivada al inicio
+        // Ensure the Game Over screen is deactivated at the start
         gameOverText.SetActive(false);
         restartButton.gameObject.SetActive(false);
         restartButton.onClick.AddListener(RestartLevel);
@@ -17,14 +17,14 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        // Activa la pantalla de Game Over
+        // Activate the Game Over screen
         gameOverText.SetActive(true);
         restartButton.gameObject.SetActive(true);
     }
 
     void RestartLevel()
     {
-        // Reinicia el nivel actual
+        // Restart the current level
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

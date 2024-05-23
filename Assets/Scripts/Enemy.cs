@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public int health = 3; // Vida del enemigo
+    public int health = 3; // Enemy health
     public float speed = 2.0f;
     private Transform player;
+    public float pushForce = 10f; // Force to push the player
 
     void Start()
     {
@@ -31,7 +32,7 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
-        // Muerte del enemigo
+        // Enemy death logic
         Destroy(gameObject);
     }
 
@@ -39,8 +40,18 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            // Lógica de daño al jugador
-            collision.gameObject.GetComponent<PlayerMovement>().TakeDamage(1);
+            // Damage player logic
+            collision.gameObject.GetComponent<HealthManager>().TakeDamage(1);
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // Only push after the first contact
+            Vector2 pushDirection = (collision.transform.position - transform.position).normalized;
+            collision.gameObject.GetComponent<Rigidbody2D>().AddForce(pushDirection * pushForce);
         }
     }
 }

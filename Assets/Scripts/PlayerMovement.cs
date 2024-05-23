@@ -1,42 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 10.0f; // Velocidad de movimiento
-    public float jumpForce = 5.0f; // Fuerza del salto
-    private bool isJumping = false; // Controla si el personaje está saltando
+    public float speed = 5.0f; // Speed of movement
+    public float jumpForce = 40.0f; // Jump strength
+    private bool isJumping = false;
     private Rigidbody2D rb;
-    public int health = 5; // Vida del jugador
-
-    public Text healthText; // Referencia al Text UI
-
-    private GameManager gameManager;
+    private HealthManager healthManager;
+    private float damageCooldown = 1.0f;
+    private float lastDamageTime;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        if (healthText == null)
+        healthManager = GetComponent<HealthManager>();
+        if (healthManager == null)
         {
-            healthText = GameObject.Find("PlayerHealthText").GetComponent<Text>();
+            Debug.LogError("HealthManager component is missing.");
         }
-        UpdateHealthUI();
-
-        // Busca el objeto GameManager en la escena
-        gameManager = FindObjectOfType<GameManager>();
     }
 
     void Update()
     {
         float moveHorizontal = Input.GetAxis("Horizontal");
 
-        // Movimiento horizontal
+        // Horizontal movement
         Vector2 movement = new Vector2(moveHorizontal * speed, rb.velocity.y);
         rb.velocity = movement;
 
-        // Salto
+        // Jump
         if (Input.GetButtonDown("Jump") && !isJumping)
         {
             rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
@@ -44,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // Detecta si el personaje está en el suelo
+    // Detect if the character is on the ground
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
@@ -55,34 +49,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        health -= damage;
-        UpdateHealthUI();
-
-        if (health <= 0)
+        if (Time.time - lastDamageTime > damageCooldown)
         {
-            Die();
+            healthManager.TakeDamage(damage);
+            lastDamageTime = Time.time;
         }
-    }
-
-    void UpdateHealthUI()
-    {
-        if (healthText != null)
-        {
-            healthText.text = "Health: " + health;
-        }
-        else
-        {
-            Debug.LogError("Health Text UI element is not assigned.");
-        }
-    }
-
-    void Die()
-    {
-        // Lógica de muerte del jugador
-        Debug.Log("Player Died");
-        // Llama al método GameOver del GameManager
-        gameManager.GameOver();
-        // Desactiva el jugador para evitar más movimientos o interacciones
-        gameObject.SetActive(false);
     }
 }
