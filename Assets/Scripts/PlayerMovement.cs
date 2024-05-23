@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Text healthText; // Referencia al Text UI
 
+    private GameManager gameManager;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -21,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
             healthText = GameObject.Find("PlayerHealthText").GetComponent<Text>();
         }
         UpdateHealthUI();
+
+        // Busca el objeto GameManager en la escena
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     void Update()
@@ -75,5 +80,9 @@ public class PlayerMovement : MonoBehaviour
     {
         // Lógica de muerte del jugador
         Debug.Log("Player Died");
+        // Llama al método GameOver del GameManager
+        gameManager.GameOver();
+        // Desactiva el jugador para evitar más movimientos o interacciones
+        gameObject.SetActive(false);
     }
 }
