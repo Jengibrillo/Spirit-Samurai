@@ -1,7 +1,7 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -9,10 +9,23 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 5.0f; // Fuerza del salto
     private bool isJumping = false; // Controla si el personaje está saltando
     private Rigidbody2D rb;
+    public int health = 5; // Vida del jugador
+
+    public Text healthText; // Referencia al Text UI
+
+    private GameManager gameManager;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        if (healthText == null)
+        {
+            healthText = GameObject.Find("PlayerHealthText").GetComponent<Text>();
+        }
+        UpdateHealthUI();
+
+        // Busca el objeto GameManager en la escena
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     void Update()
@@ -38,5 +51,38 @@ public class PlayerMovement : MonoBehaviour
         {
             isJumping = false;
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        UpdateHealthUI();
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    void UpdateHealthUI()
+    {
+        if (healthText != null)
+        {
+            healthText.text = "Health: " + health;
+        }
+        else
+        {
+            Debug.LogError("Health Text UI element is not assigned.");
+        }
+    }
+
+    void Die()
+    {
+        // Lógica de muerte del jugador
+        Debug.Log("Player Died");
+        // Llama al método GameOver del GameManager
+        gameManager.GameOver();
+        // Desactiva el jugador para evitar más movimientos o interacciones
+        gameObject.SetActive(false);
     }
 }

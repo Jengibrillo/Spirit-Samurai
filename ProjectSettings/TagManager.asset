@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Fondo
+  - Ground
+  - Enemies
   layers:
   - Default
   - TransparentFX
@@ -12,9 +14,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - Environment
   - 
   - 
   - 
@@ -54,9 +56,6 @@ TagManager:
   - name: Projectiles
     uniqueID: 1621131611
     locked: 0
-  - name: Suelo
-    uniqueID: 1257578517
-    locked: 0
-  - name: Sueloraw
-    uniqueID: 3875002225
+  - name: Floor
+    uniqueID: 238121899
     locked: 0
